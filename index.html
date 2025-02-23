@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Code Repository</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 56px;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #ced4da;
+            padding: 15px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Code Repository</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-3">My Code Collection</h2>
+        
+        <h3 class="mt-4">Hohmann Orbit Transfer</h3>
+        <div class="position-relative">
+            <button class="btn btn-secondary copy-btn" onclick="copyToClipboard(this)">Copy</button>
+        <div class="code-block">
+import numpy as np
+from scipy.integrate import solve_ivp
+import matplotlib.pyplot as plt
+
+# Constants
+G = 6.67430e-11  # Gravitational constant, m^3/kg/s^2
+M_sun = 1.989e30  # Mass of the Sun, kg
+AU = 1.496e11  # 1 Astronomical Unit, m (average distance Earth-Sun)
+YEAR = 365.25 * 24 * 3600  # Seconds in a year
+
+# Orbital radii (approximate, circular orbits)
+r_earth = AU  # Radius of Earth's orbit around the Sun
+r_mars = 1.524 * AU  # Radius of Mars' orbit around the Sun
+
+# Calculate transfer orbit semi-major axis
+a_transfer = (r_earth + r_mars) / 2
+
+# Calculate orbital periods
+T_earth = 2 * np.pi * np.sqrt(r_earth**3 / (G * M_sun))
+T_mars = 2 * np.pi * np.sqrt(r_mars**3 / (G * M_sun))
+T_transfer = np.pi * np.sqrt(a_transfer**3 / (G * M_sun))
+
+# Initial velocities (circular orbits)
+v_earth = np.sqrt(G * M_sun / r_earth)
+v_mars = np.sqrt(G * M_sun / r_mars)
+
+# Delta-V for Hohmann transfer
+v_transfer1 = np.sqrt(G * M_sun * (2 / r_earth - 1 / a_transfer))
+delta_v1 = v_transfer1 - v_earth
+
+# Initial state for the spacecraft
+r0 = np.array([r_earth, 0])
+v0 = np.array([0, v_earth + delta_v1])
+
+# Define the equations of motion
+def equations(t, y):
+    rx, ry, vx, vy = y
+    r = np.sqrt(rx**2 + ry**2)
+    ax = -G * M_sun * rx / r**3
+    ay = -G * M_sun * ry / r**3
+    return [vx, vy, ax, ay]
+
+# Time span for integration
+t_span = (0, 2 * T_transfer)
+y0 = [r0[0], r0[1], v0[0], v0[1]]
+
+# Solve the differential equations
+sol = solve_ivp(equations, t_span, y0, max_step=10000, rtol=1e-8)
+
+# Extract results
+rx, ry = sol.y[0], sol.y[1]
+
+# Plot results
+fig, ax = plt.subplots(figsize=(8, 8))
+ax.plot(rx / AU, ry / AU, label="Transfer Orbit", color="orange")
+ax.plot([r_earth / AU * np.cos(t) for t in np.linspace(0, 2 * np.pi, 500)],
+        [r_earth / AU * np.sin(t) for t in np.linspace(0, 2 * np.pi, 500)],
+        label="Earth Orbit", color="blue")
+ax.plot([r_mars / AU * np.cos(t) for t in np.linspace(0, 2 * np.pi, 500)],
+        [r_mars / AU * np.sin(t) for t in np.linspace(0, 2 * np.pi, 500)],
+        label="Mars Orbit", color="red")
+
+# Mark Earth, Mars, and Sun
+ax.plot(0, 0, 'yo', markersize=12, label="Sun")
+ax.plot(r_earth / AU, 0, 'bo', label="Earth Start")
+ax.plot(r_mars / AU * np.cos(np.pi), r_mars / AU * np.sin(np.pi), 'ro', label="Mars Encounter")
+
+# Formatting
+ax.set_aspect('equal')
+ax.set_xlabel("x (AU)")
+ax.set_ylabel("y (AU)")
+ax.set_title("Hohmann Transfer from Earth to Mars")
+ax.legend()
+plt.grid()
+plt.savefig("hohmann.png", format="png", dpi=300)
+            </div>
+        </div>
+        
+        <h3 class="mt-4">Alpha Particle Scattering</h3>
+        <div class="position-relative">
+            <button class="btn btn-secondary copy-btn" onclick="copyToClipboard(this)">Copy</button>
+        <div class="code-block">
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+# Constants
+e = 1.602e-19  # Elementary charge (C)
+k = 8.99e9     # Coulomb's constant (N·m²/C²)
+m_alpha = 6.64e-27  # Mass of alpha particle (kg)
+q_alpha = 2 * e  # Charge of alpha particle (C)
+q_gold = 79 * e  # Charge of gold nucleus (C)
+
+# Function to calculate the acceleration (force/mass)
+def coulomb_force(t, y, k, q_alpha, q_gold, m_alpha, epsilon=1e-15):
+    x, y, vx, vy = y
+    r = np.sqrt(x**2 + y**2 + epsilon**2)
+    ax = k * q_alpha * q_gold / (m_alpha * r**2) * (x / r)
+    ay = k * q_alpha * q_gold / (m_alpha * r**2) * (y / r)
+    return [vx, vy, -ax, ay]
+
+# Simulate trajectory for a single alpha particle
+def simulate_trajectory(b, v_initial, t_max=1e-18, dt=1e-21):
+    # Initial conditions: (x, y, vx, vy)
+    y0 = [0, b, v_initial, 0]
+    t_span = (0, t_max)
+    t_eval = np.arange(0, t_max, dt)
+    
+    # Solve using Runge-Kutta method
+    solution = solve_ivp(
+        coulomb_force, t_span, y0, t_eval=t_eval, args=(k, q_alpha, q_gold, m_alpha), rtol=1e-6
+    )
+    return solution
+
+# Parameters
+v_initial = 2e7  # Initial velocity of alpha particles (m/s)
+b_values = np.array([1e-14])  # Impact parameters (m)
+
+# Plot trajectories
+plt.figure(figsize=(10, 5))
+for b in b_values:
+    # Simulate trajectory
+    sol = simulate_trajectory(b, v_initial)
+    x, y = sol.y[0], sol.y[1]
+    
+    # Plot deflected trajectory
+    plt.plot(x, y, label=f"b = {b:.2e} m",linewidth=3)
+    
+    # Plot incident trajectory (straight line)
+    x_incident = np.linspace(-x[-1], 0, 100)
+    y_incident = b * np.ones_like(x_incident)
+    plt.plot(x_incident, y_incident, linestyle="--", color="gray", alpha=0.6,linewidth=3)
+
+# Plot the nucleus
+nucleus_radius = 7.3e-15  # Approximate radius of gold nucleus (m)
+nucleus = plt.Circle((0, 0), nucleus_radius, color='gold', label='Gold Nucleus')
+plt.gca().add_artist(nucleus)
+
+# Labels and legend
+plt.xlabel("x (m)")
+plt.ylabel("y (m)")
+plt.title("Trajectories of Alpha Particles Scattered by a Gold Nucleus")
+plt.axhline(0, color="black", linewidth=0.5, linestyle="--")
+plt.axvline(0, color="black", linewidth=0.5, linestyle="--")
+plt.legend()
+plt.grid()
+plt.axis('equal')
+plt.show()
+            </div>
+        </div>
+
+        <h3 class="mt-4">Nuclear Decay</h3>
+        <div class="position-relative">
+            <button class="btn btn-secondary copy-btn" onclick="copyToClipboard(this)">Copy</button>
+        <div class="code-block">
+import numpy as np
+import matplotlib.pyplot as plt
+
+th = 1620*365*24*3600
+p = 0.693/th
+pp = []
+cc = []
+
+def f(t):
+    return np.exp(-p*t)
+
+tt = 1000*365*24*3600
+print ("the required weight is", 5*f(tt))
+
+for i in range (0,2000,100):
+    c = f(i*365*24*3600)
+    pp.append(5*c)
+    cc.append(i)
+    if i ==1000:
+        plt.scatter(i,5*c)
+        
+plt.plot(cc,pp)
+plt.xlabel("years")
+plt.ylabel("weight")
+            </div>
+        </div>
+    
+    <h3 class="mt-4">Volterra Predator-Prey</h3>
+    <div class="position-relative">
+        <button class="btn btn-secondary copy-btn" onclick="copyToClipboard(this)">Copy</button>
+    <div class="code-block">
+import numpy as np
+import matplotlib.pyplot as plt
+
+alpha=1
+beta=1.2
+delta=1
+gamma=4
+
+def euler_method(u,f,dt):
+    return u+dt*f(u)
+    
+def f(u):
+    x=u[0]
+    y=u[1]
+    return np.array([x*(alpha-beta*y),-y*(gamma-delta*x)])
+    
+T=15
+dt=0.01
+N=int(T/dt)+1
+x0=10
+y0=2
+t0=0
+u_euler=np.empty((N,2))
+u_euler[0]=np.array([x0,y0])
+
+for n in range(N-1):
+    u_euler[n+1]=euler_method(u_euler[n],f,dt)
+    time=np.linspace(0,0,T,N)
+    x_euler=u_euler[:,0]
+    y_euler=u_euler[:,1]
+
+plt.plot(x_euler,y_euler,label="Population")
+plt.xlabel("Prey Population")
+plt.ylabel("Predator Population")
+plt.title("Volterra Predator-Prey Phase Diargram")
+plt.legend(loc="upper right")
+plt.grid(True)
+plt.show()
+        </div>
+    </div>
+
+</div>
+<script>
+    function copyToClipboard(button) {
+        let codeBlock = button.nextElementSibling;
+        let textArea = document.createElement("textarea");
+        textArea.value = codeBlock.innerText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        button.innerText = "Copied!";
+        setTimeout(() => button.innerText = "Copy", 2000);
+    }
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

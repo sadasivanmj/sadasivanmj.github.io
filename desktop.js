@@ -5,7 +5,7 @@ const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
 // --- OPEN ACTION ---
 function openArticles() {
-  window.location.href = "article/article.html";
+  window.location.href = "./article/article.html";
 }
 
 // --- DESKTOP BEHAVIOR (double-click) ---

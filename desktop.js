@@ -1,73 +1,31 @@
-const desktop = document.getElementById("desktop");
-const icon = document.getElementById("articles");
-const dialog = document.getElementById("deleteDialog");
+const articlesIcon = document.getElementById("articles");
 
-let selected = false;
-let clickTimer = null;
+// Utility: detect touch-first devices
+const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
-/* -------------------------
-   ICON BEHAVIOR
-   ------------------------- */
-
-/* Single click: select icon */
-icon.addEventListener("click", (e) => {
-  e.stopPropagation(); // prevent desktop deselect
-  clearTimeout(clickTimer);
-  clickTimer = setTimeout(selectIcon, 200);
-});
-
-/* Double click: open articles */
-icon.addEventListener("dblclick", (e) => {
-  e.stopPropagation();
-  clearTimeout(clickTimer);
-  openArticles();
-});
-
-/* -------------------------
-   DESKTOP BEHAVIOR
-   ------------------------- */
-
-/* Click empty desktop: deselect */
-desktop.addEventListener("click", () => {
-  deselectAll();
-});
-
-/* -------------------------
-   KEYBOARD BEHAVIOR
-   ------------------------- */
-
-/* Delete key: show XP dialog */
-document.addEventListener("keydown", (e) => {
-  if (selected && e.key === "Delete") {
-    openDialog();
-  }
-});
-
-/* -------------------------
-   FUNCTIONS
-   ------------------------- */
-
-function selectIcon() {
-  deselectAll();
-  icon.classList.add("selected");
-  selected = true;
-}
-
-function deselectAll() {
-  document.querySelectorAll(".icon").forEach(el => {
-    el.classList.remove("selected");
-  });
-  selected = false;
-}
-
+// --- OPEN ACTION ---
 function openArticles() {
-  window.location.href = "articles/article.html";
+  window.location.href = "article/article.html";
 }
 
-function openDialog() {
-  dialog.style.display = "block";
+// --- DESKTOP BEHAVIOR (double-click) ---
+if (!isTouchDevice) {
+  articlesIcon.addEventListener("dblclick", (e) => {
+    e.stopPropagation();
+    openArticles();
+  });
+
+  // Optional: single-click just selects
+  articlesIcon.addEventListener("click", (e) => {
+    e.stopPropagation();
+    articlesIcon.classList.add("selected");
+  });
 }
 
-function closeDialog() {
-  dialog.style.display = "none";
+// --- MOBILE BEHAVIOR (single tap) ---
+if (isTouchDevice) {
+  articlesIcon.addEventListener("click", (e) => {
+    e.stopPropagation();
+    openArticles();
+  });
 }

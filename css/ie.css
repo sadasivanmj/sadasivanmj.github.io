@@ -35,6 +35,11 @@ html, body {
   height: calc(100% - var(--xp-titlebar-height));
 }
 
+/* Hide menu button on desktop */
+#menuBtn {
+  display: none;
+}
+
 /* =========================================================
    CLIENT FRAME
    ========================================================= */
@@ -89,6 +94,7 @@ html, body {
   overflow-x: hidden;
   padding: 0;
   font-family: "Times New Roman", serif;
+  font-size: 20px;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -249,6 +255,16 @@ blockquote {
    HOME PAGE
    ========================================================= */
 
+.home-articles h2 {
+  font-family: "Press Start 2P", monospace;
+  font-size: 28px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #000;
+  display: inline-block;
+  padding-bottom: 6px;
+}
+
+
 .home-hero {
   min-height: 90vh;
   padding: 40px 20px;
@@ -310,43 +326,57 @@ blockquote {
    HOME ARTICLES GRID
    ========================================================= */
 
-.home-articles {
-  padding: 40px 20px;
-}
-
-.home-articles h2 {
-  font-family: "Press Start 2P", monospace;
-  font-size: 24px;
-  margin-bottom: 24px;
-}
+/* =========================
+   ARTICLE TILES (HOME)
+   ========================= */
 
 .article-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
 }
 
-.article-icon {
-  text-align: center;
+.article-tile {
+  background: #ffffff;
+  border: 2px solid #808080;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    inset -1px -1px 0 #404040;
+
+  padding: 18px 16px;
   cursor: pointer;
-  padding: 10px;
-}
 
-.article-icon img {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 8px;
-}
-
-.article-icon span {
   font-family: "VT323", monospace;
-  font-size: 18px;
 }
 
-.article-icon:hover {
+.article-tile:hover {
   background: #d6dff7;
   outline: 1px dotted #000;
 }
+
+.article-tile:active {
+  box-shadow:
+    inset -1px -1px 0 #ffffff,
+    inset 1px 1px 0 #404040;
+}
+
+/* Title */
+.tile-title {
+  font-size: 22px;
+  font-family: "Press Start 2P", monospace;
+  margin-bottom: 8px;
+}
+
+/* Subtitle */
+.tile-sub {
+  font-size: 18px;
+  opacity: 0.85;
+}
+
+
+
+
 
 /* ===============================
    NAV PANE — TYPOGRAPHY SCALE
@@ -456,6 +486,12 @@ blockquote {
   .planet-gif {
     width: 96px;
     height: 96px;
+  }
+
+  #menuBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

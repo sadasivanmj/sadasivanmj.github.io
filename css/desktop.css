@@ -91,3 +91,9 @@ html, body {
 
   z-index: 1000;
 }
+
+@media (pointer: coarse) {
+  .icon:active {
+    background: rgba(0, 120, 215, 0.6);
+  }
+}

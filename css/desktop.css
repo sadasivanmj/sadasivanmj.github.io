@@ -1,0 +1,93 @@
+/* =========================
+   GLOBAL RESET & VIEWPORT LOCK
+   ========================= */
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  /* Kill scrolling everywhere */
+  overflow: hidden;
+  overscroll-behavior: none;
+
+  /* Mobile: prevent swipe scroll & zoom */
+  touch-action: none;
+}
+
+/* =========================
+   DESKTOP BACKGROUND
+   ========================= */
+
+/* =========================
+   DESKTOP BACKGROUND (SOLID)
+   ========================= */
+
+#desktop {
+  position: fixed;
+  inset: 0;
+
+  /* Solid XP-style background */
+  background-color: #3a6ea5;
+
+  font-family: Tahoma, Verdana, sans-serif;
+}
+
+/* =========================
+   DESKTOP ICON
+   ========================= */
+
+.icon {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+
+  width: 80px;
+  text-align: center;
+
+  color: white;
+  user-select: none;
+  cursor: default;
+}
+
+/* Icon image */
+.icon img {
+  width: 48px;
+  height: 48px;
+  display: block;
+  margin: 0 auto 6px;
+}
+
+/* Icon label */
+.icon span {
+  font-size: 13px;
+  line-height: 1.2;
+  text-shadow: 1px 1px 2px black;
+  display: block;
+}
+
+/* Hover feedback (mouse users) */
+.icon:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+/* Selected icon (XP-style highlight) */
+.icon.selected {
+  background: rgba(0, 120, 215, 0.6);
+  border-radius: 4px;
+}
+
+/* =========================
+   XP DIALOG POSITIONING
+   ========================= */
+
+#deleteDialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  z-index: 1000;
+}

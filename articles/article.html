@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Physics Magazine - Internet Explorer</title>
+
+  <!-- XP.css -->
+  <link rel="stylesheet" href="https://unpkg.com/xp.css" />
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="../css/ie.css" />
+
+  <!-- Retro fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body class="is-home">
+
+<div class="window" style="width: calc(100vw - 24px); height: calc(100vh - 24px); margin: 12px;">
+
+  <!-- XP TITLE BAR -->
+  <div class="title-bar">
+    <div class="title-bar-controls left-controls">
+      <button id="menuBtn" aria-label="Menu">☰</button>
+    </div>
+
+    <div class="title-bar-text">
+      Physics Magazine - Internet Explorer
+    </div>
+
+    <div class="title-bar-controls">
+      <button aria-label="Minimize"></button>
+      <button aria-label="Maximize"></button>
+      <button aria-label="Close"></button>
+    </div>
+  </div>
+
+  <!-- WINDOW BODY -->
+  <div class="window-body">
+
+    <!-- CLIENT FRAME -->
+    <div id="client-frame">
+
+      <!-- MAIN LAYOUT -->
+      <div id="layout">
+
+        <!-- SIDEBAR -->
+        <aside id="sidebar">
+          <div class="nav-frame">
+            <ul class="tree-view">
+              <li>
+                <span class="tree-label">
+                  <a href="javascript:void(0)" onclick="loadPage('home.html')">
+                    Physics Magazine
+                  </a>
+                </span>
+
+                <ul>
+                  <li>
+                    <span class="tree-label">Latest</span>
+                    <ul>
+                      <li><a href="javascript:void(0)" onclick="loadPage('olbers_paradox.html')">Olber's Paradox</a></li>
+                      <li><a href="javascript:void(0)" onclick="loadPage('article2.html')">Article Two</a></li>
+                      <li><a href="javascript:void(0)" onclick="loadPage('article3.html')">Article Three</a></li>
+                      <li><a href="javascript:void(0)" onclick="loadPage('article4.html')">Article Four</a></li>
+                      <li><a href="javascript:void(0)" onclick="loadPage('article5.html')">Article Five</a></li>
+                    </ul>
+                  </li>
+
+                  <li>
+                    <span class="tree-label">Browse</span>
+                    <ul>
+                      <li><a href="javascript:void(0)" onclick="loadPage('home.html')">All Articles</a></li>
+                    </ul>
+                  </li>
+
+                  <li>
+                    <span class="tree-label">Search</span>
+                    <ul>
+                      <li><span class="muted">(coming soon)</span></li>
+                    </ul>
+                  </li>
+                </ul>
+
+              </li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- VIEWER -->
+        <main id="viewer">
+
+          <!-- ARTICLE TOOLBAR (hidden on home) -->
+          <div id="article-toolbar" class="article-toolbar hidden">
+            <div class="toolbar-left">
+              <strong>Article</strong> › <span id="article-title"></span>
+            </div>
+
+            <div class="toolbar-right">
+              <button class="toolbar-btn" onclick="adjustFont(-1)">A−</button>
+              <button class="toolbar-btn" onclick="adjustFont(1)">A+</button>
+              <button class="toolbar-btn" onclick="window.print()">🖨</button>
+            </div>
+          </div>
+
+          <!-- ARTICLE PROGRESS (hidden on home) -->
+          <div id="article-progress" class="article-progress hidden">
+            <div class="article-progress-bar" id="articleProgress"></div>
+          </div>
+
+          <!-- CONTENT CONTAINER -->
+          <div id="article-container"></div>
+
+        </main>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE LOADER -->
+<script>
+function loadPage(page) {
+  const isArticle = page !== "home.html";
+
+  location.hash = page.replace(".html", "");
+  document.body.classList.toggle("is-home", !isArticle);
+
+  const toolbar = document.getElementById("article-toolbar");
+  const progress = document.getElementById("article-progress");
+  const container = document.getElementById("article-container");
+
+  fetch("content/" + page + "?v=" + Date.now())
+    .then(r => r.text())
+    .then(html => {
+      container.innerHTML = html;
+
+      if (isArticle) {
+        toolbar.classList.remove("hidden");
+        progress.classList.remove("hidden");
+
+        const h1 = container.querySelector("h1");
+        document.getElementById("article-title").textContent =
+          h1 ? h1.textContent : "Article";
+      } else {
+        toolbar.classList.add("hidden");
+        progress.classList.add("hidden");
+      }
+    });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const page = location.hash
+    ? location.hash.substring(1) + ".html"
+    : "home.html";
+  loadPage(page);
+});
+
+window.addEventListener("hashchange", () => {
+  const page = location.hash
+    ? location.hash.substring(1) + ".html"
+    : "home.html";
+  loadPage(page);
+});
+</script>
+
+<!-- MOBILE NAV -->
+<script>
+document.getElementById("menuBtn").addEventListener("click", () => {
+  document.body.classList.toggle("nav-open");
+});
+
+document.querySelectorAll("#sidebar a").forEach(link => {
+  link.addEventListener("click", () => {
+    document.body.classList.remove("nav-open");
+  });
+});
+</script>
+
+<!-- ARTICLE PROGRESS -->
+<script>
+(function () {
+  const viewer = document.getElementById("viewer");
+  const bar = document.getElementById("articleProgress");
+
+  function updateProgress() {
+    const scrollTop = viewer.scrollTop;
+    const scrollHeight = viewer.scrollHeight - viewer.clientHeight;
+    const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+    bar.style.width = progress + "%";
+  }
+
+  viewer.addEventListener("scroll", updateProgress);
+  window.addEventListener("resize", updateProgress);
+})();
+</script>
+
+</body>
+</html>

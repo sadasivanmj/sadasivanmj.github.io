@@ -1,0 +1,492 @@
+/* =========================================================
+   GLOBAL CONSTRAINTS
+   ========================================================= */
+
+:root {
+  --xp-titlebar-height: 40px;
+  --xp-window-padding: 12px;
+}
+
+/* Absolute lock: only viewer scrolls */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+/* =========================================================
+   WINDOW (XP SHELL)
+   ========================================================= */
+
+.window {
+  overflow: hidden;
+}
+
+.window-body {
+  background: #ece9d8;
+  padding: var(--xp-window-padding);
+  height: calc(100% - var(--xp-titlebar-height));
+}
+
+/* =========================================================
+   CLIENT FRAME
+   ========================================================= */
+
+#client-frame {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border: 1px solid #808080;
+  overflow: hidden;
+}
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+
+#layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* =========================================================
+   SIDEBAR (DESKTOP)
+   ========================================================= */
+
+#sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  padding: 10px;
+  border-right: 1px solid #808080;
+  overflow: hidden;
+}
+
+.nav-frame {
+  height: 100%;
+  background: #d6dff7;
+  border: 1px solid #808080;
+  padding: 10px;
+  overflow: hidden;
+}
+
+/* =========================================================
+   VIEWER
+   ========================================================= */
+
+#viewer {
+  flex: 1;
+  background: #fcfcf9;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+  font-family: "Times New Roman", serif;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* =========================================================
+   ARTICLE TOOLBAR (FROZEN STRIP)
+   ========================================================= */
+
+.article-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
+  height: 36px;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 8px;
+
+  background: linear-gradient(#f5f5f5, #e6e6e6);
+  border-bottom: 1px solid #9c9c9c;
+
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: 14px;
+}
+
+.article-toolbar * {
+  margin: 0;
+}
+
+.toolbar-left {
+  white-space: nowrap;
+}
+
+.toolbar-right {
+  display: flex;
+  gap: 6px;
+}
+
+.toolbar-btn {
+  height: 22px;
+  min-width: 28px;
+  padding: 0 6px;
+  font-size: 12px;
+  line-height: 20px;
+  background: #f0f0f0;
+  border: 1px solid #7f7f7f;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.toolbar-btn:hover {
+  background: #e8e8e8;
+}
+
+.toolbar-btn:active {
+  background: #dcdcdc;
+  border-color: #4f4f4f;
+}
+
+/* =========================================================
+   ARTICLE PROGRESS BAR (ARTICLE ONLY)
+   ========================================================= */
+
+.article-progress {
+  position: sticky;
+  top: 36px;
+  z-index: 19;
+
+  height: 4px;
+  width: 100%;
+
+  background: #cfdac8;
+}
+
+.article-progress > div {
+  height: 100%;
+  width: 0%;
+  background: #2ea043;
+}
+
+/* =========================================================
+   ARTICLE CONTENT
+   ========================================================= */
+
+#article-container {
+  padding: 24px 24px 48px;
+}
+
+.article {
+  max-width: 720px;
+  margin-left: 128px;
+  font-size: 19px;
+  line-height: 1.6;
+  color: #111;
+}
+
+.article-header h1 {
+  font-size: 86px;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.article-standfirst {
+  font-size: 20px;
+  color: #555;
+  max-width: 520px;
+  margin-bottom: 24px;
+}
+
+.article-body p {
+  font-size: 20px;
+  margin-bottom: 1.25em;
+  padding-left: 12px;
+  position: relative;
+}
+
+.article-body p::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 3px;
+  height: 3px;
+  background: #bbb;
+  border-radius: 50%;
+}
+
+blockquote {
+  margin: 24px 0;
+  padding-left: 16px;
+  border-left: 3px solid #999;
+  font-style: italic;
+  font-size: 20px;
+  color: #333;
+}
+
+.article-image {
+  max-width: 560px;
+  margin: 32px auto;
+  text-align: center;
+}
+
+.article-image img {
+  width: 100%;
+  border: 1px solid #aaa;
+}
+
+.article-image figcaption {
+  font-size: 13px;
+  color: #555;
+  margin-top: 6px;
+}
+
+/* =========================================================
+   HOME PAGE
+   ========================================================= */
+
+.home-hero {
+  min-height: 90vh;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+  position: relative;
+  background-color: #02040a;
+  color: #fff;
+}
+
+.home-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../images/bg.png");
+  background-repeat: repeat;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.hero-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.planet-gif {
+  width: 72px;
+  height: 72px;
+  image-rendering: pixelated;
+}
+
+.home-hero h1 {
+  font-family: "Press Start 2P", monospace;
+  font-size: 40px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.home-hero .subtitle {
+  font-family: "VT323", monospace;
+  font-size: 22px;
+  max-width: 700px;
+  margin: 0 auto 32px;
+}
+
+.home-hero .hint {
+  font-family: "VT323", monospace;
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+/* =========================================================
+   HOME ARTICLES GRID
+   ========================================================= */
+
+.home-articles {
+  padding: 40px 20px;
+}
+
+.home-articles h2 {
+  font-family: "Press Start 2P", monospace;
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+
+.article-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 20px;
+}
+
+.article-icon {
+  text-align: center;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.article-icon img {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+}
+
+.article-icon span {
+  font-family: "VT323", monospace;
+  font-size: 18px;
+}
+
+.article-icon:hover {
+  background: #d6dff7;
+  outline: 1px dotted #000;
+}
+
+/* ===============================
+   NAV PANE — TYPOGRAPHY SCALE
+   =============================== */
+
+/* Base tree text */
+.tree-view,
+.tree-view li,
+.tree-view a,
+.tree-view .tree-label {
+  font-size: 15px;              /* default XP is ~12px */
+  line-height: 1.4;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+/* Section headers like "Latest", "Browse", "Search" */
+.tree-view .tree-label {
+  font-weight: bold;
+}
+
+/* Article links */
+.tree-view a {
+  text-decoration: none;
+  color: #000;
+}
+
+/* Hover stays XP-ish */
+.tree-view a:hover {
+  background: #d6dff7;
+  outline: 1px dotted #000;
+}
+
+
+/* =========================================================
+   MOBILE MODE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .window {
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+  }
+
+  .window-body {
+    padding: 0;
+    height: calc(100vh - var(--xp-titlebar-height));
+  }
+
+  #client-frame {
+    border: none;
+    height: 100%;
+  }
+
+  #layout {
+    height: 100%;
+  }
+
+  /* Sidebar overlay */
+  #sidebar {
+    position: fixed;
+    top: calc(var(--xp-titlebar-height) + var(--xp-window-padding));
+    left: var(--xp-window-padding);
+    right: var(--xp-window-padding);
+    bottom: var(--xp-window-padding);
+    border: none;
+    padding: 0;
+    display: none;
+    z-index: 1000;
+  }
+
+  body.nav-open #sidebar {
+    display: block;
+  }
+
+  body.nav-open #viewer {
+    display: none;
+  }
+
+  #viewer {
+    padding: 0;
+  }
+
+  .article {
+    margin: 0;
+    max-width: 100%;
+    padding: 0 12px;
+  }
+
+  .article-header h1 {
+    font-size: 28px;
+  }
+
+  .article-body p {
+    font-size: 16px;
+  }
+
+  .home-hero h1 {
+    font-size: 28px;
+  }
+
+  .hero-title {
+    flex-direction: column;
+  }
+
+  .planet-gif {
+    width: 96px;
+    height: 96px;
+  }
+}
+
+/* =========================================================
+   VISIBILITY HELPERS
+   ========================================================= */
+
+.hidden {
+  display: none;
+}
+
+/* ===============================
+   XP TITLE BAR — THICKER
+   =============================== */
+
+.title-bar {
+  height: 40px;                 /* was ~30px */
+  padding: 0 8px;
+}
+
+.title-bar-text {
+  line-height: 40px;            /* match new height */
+  font-size: 14px;
+}
+
+.title-bar-controls {
+  height: 40px;
+}
+
+.title-bar-controls button {
+  width: 28px;
+  height: 24px;
+  margin-top: 8px;              /* vertically center buttons */
+}

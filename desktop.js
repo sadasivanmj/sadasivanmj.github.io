@@ -1,31 +1,22 @@
 const articlesIcon = document.getElementById("articles");
 
-// Utility: detect touch-first devices
-const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+const ARTICLES_URL = new URL(
+  "articles/article.html",
+  window.location.href
+).href;
 
-// --- OPEN ACTION ---
 function openArticles() {
-  window.location.href = "./articles/article.html";
+  window.location.href = ARTICLES_URL;
 }
 
-// --- DESKTOP BEHAVIOR (double-click) ---
-if (!isTouchDevice) {
-  articlesIcon.addEventListener("dblclick", (e) => {
-    e.stopPropagation();
+// Touch-first devices
+articlesIcon.addEventListener("pointerup", (e) => {
+  if (e.pointerType === "touch") {
     openArticles();
-  });
+  }
+});
 
-  // Optional: single-click just selects
-  articlesIcon.addEventListener("click", (e) => {
-    e.stopPropagation();
-    articlesIcon.classList.add("selected");
-  });
-}
-
-// --- MOBILE BEHAVIOR (single tap) ---
-if (isTouchDevice) {
-  articlesIcon.addEventListener("click", (e) => {
-    e.stopPropagation();
-    openArticles();
-  });
-}
+// Mouse devices
+articlesIcon.addEventListener("dblclick", (e) => {
+  openArticles();
+});

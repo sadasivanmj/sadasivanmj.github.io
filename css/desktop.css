@@ -13,7 +13,6 @@ html, body {
   overscroll-behavior: none;
 
   /* Mobile: prevent swipe scroll & zoom */
-  touch-action: none;
 }
 
 /* =========================
@@ -32,6 +31,8 @@ html, body {
   background-color: #3a6ea5;
 
   font-family: Tahoma, Verdana, sans-serif;
+
+  touch-action: none;
 }
 
 /* =========================
